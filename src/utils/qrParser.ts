@@ -80,8 +80,8 @@ export function parseInternalLabel(raw: string): ParsedInternalLabel {
  * Formato bruto exemplo: N00008839901001,F02825000004082600006000PC,P06174I
  * 
  * - Código do Item de Expedição: Localizar o prefixo P. Extrair todos os caracteres após o prefixo P (ex: 06174I)
- * - Quantidade de Expedição: Localizar sub-string terminada em PC (ex: 6000PC).
- *   Isolar o valor numérico (6000), tratar 2 últimos dígitos como casas decimais (6000 -> 60.00 -> 60).
+ * - Quantidade de Expedição: Localizar a sequência de dígitos que precede a indicação PC (ex: 02825000004082600006000PC).
+ *   Coletar apenas os últimos 4 dígitos informados (ex: 6000). Os últimos 2 dígitos são casas decimais (ex: 6000 -> 60,00 -> 60).
  */
 export function parseShippingLabel(raw: string): ParsedShippingLabel {
   const cleanRaw = raw.trim();
@@ -116,28 +116,38 @@ export function parseShippingLabel(raw: string): ParsedShippingLabel {
   let quantityDecimal = 0;
   let quantity = 0;
 
+  // Localiza os dígitos imediatamente antes de PC
   const pcMatch = cleanRaw.match(/([0-9]+)\s*PC/i);
 
   if (pcMatch && pcMatch[1]) {
-    quantityRaw = `${pcMatch[1]}PC`;
-    const numDigitsStr = pcMatch[1];
-    const numVal = parseInt(numDigitsStr, 10);
+    const fullDigits = pcMatch[1];
+    // Coleta apenas os últimos 4 dígitos (ex: "6000" de "02825000004082600006000")
+    const padded = fullDigits.padStart(4, '0');
+    const last4Digits = padded.slice(-4);
+    
+    quantityRaw = `${last4Digits}PC`;
+    const numVal = parseInt(last4Digits, 10) || 0;
 
-    // Regra: "Tratar os dois últimos dígitos como casas decimais. 6000 torna-se 60.00. Para comparação, descartar casas decimais -> 60."
-    if (numDigitsStr.length >= 3) {
-      quantityDecimal = numVal / 100;
-      quantity = Math.floor(quantityDecimal);
+    // Os últimos 2 dígitos são casas decimais (após o ponto). Ex: 6000 = 60.00
+    quantityDecimal = numVal / 100;
+    
+    // Se for inteiro (ex: 60.00 -> 60), usa o número inteiro para a comparação
+    if (quantityDecimal % 1 === 0) {
+      quantity = Math.round(quantityDecimal);
     } else {
-      quantityDecimal = numVal;
-      quantity = numVal;
+      quantity = Number(quantityDecimal.toFixed(2));
     }
   } else {
-    // Fallback: Tentar achar números se isolados
-    const numMatch = cleanRaw.match(/,(\d+)(?:PC|,|$)/i);
-    if (numMatch) {
-      const val = parseInt(numMatch[1], 10);
-      quantityDecimal = val >= 100 ? val / 100 : val;
-      quantity = Math.floor(quantityDecimal);
+    // Fallback: Tentar achar sequência de dígitos se isolados
+    const numMatch = cleanRaw.match(/,([0-9]+)(?:PC|,|$)/i);
+    if (numMatch && numMatch[1]) {
+      const fullDigits = numMatch[1];
+      const padded = fullDigits.padStart(4, '0');
+      const last4Digits = padded.slice(-4);
+      quantityRaw = `${last4Digits}PC`;
+      const numVal = parseInt(last4Digits, 10) || 0;
+      quantityDecimal = numVal / 100;
+      quantity = quantityDecimal % 1 === 0 ? Math.round(quantityDecimal) : Number(quantityDecimal.toFixed(2));
     }
   }
 
