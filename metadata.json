@@ -1,0 +1,10 @@
+{
+  "name": "Verificador de Etiquetas QR Code",
+  "description": "Aplicativo de conferência logística para validação de etiquetas de QR Code e comparação de itens e quantidades.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

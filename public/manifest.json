@@ -1,0 +1,18 @@
+{
+  "short_name": "Conferência",
+  "name": "Verificador de Etiquetas QR Code",
+  "description": "Aplicativo de conferência logística para validação de etiquetas QR Code e comparação de itens e quantidades.",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512 192x192 64x64 32x32",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "display": "standalone",
+  "orientation": "portrait"
+}

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <rect width="512" height="512" rx="128" fill="#090d16"/>
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="#1e293b" stroke="#f97316" stroke-width="12" stroke-dasharray="16 16"/>
+  
+  <!-- Orange Barcode/QR Box -->
+  <rect x="128" y="128" width="100" height="100" rx="20" fill="#f97316"/>
+  <rect x="153" y="153" width="50" height="50" rx="8" fill="#090d16"/>
+  <rect x="168" y="168" width="20" height="20" rx="4" fill="#f97316"/>
+  
+  <rect x="284" y="128" width="100" height="100" rx="20" fill="#3b82f6"/>
+  <rect x="309" y="153" width="50" height="50" rx="8" fill="#090d16"/>
+  <rect x="324" y="168" width="20" height="20" rx="4" fill="#3b82f6"/>
+
+  <rect x="128" y="284" width="100" height="100" rx="20" fill="#3b82f6"/>
+  <rect x="153" y="309" width="50" height="50" rx="8" fill="#090d16"/>
+  <rect x="168" y="324" width="20" height="20" rx="4" fill="#3b82f6"/>
+
+  <!-- Checkmark -->
+  <path d="M260 330 L310 380 L400 270" fill="none" stroke="#10b981" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
